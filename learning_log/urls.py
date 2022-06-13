@@ -4,9 +4,7 @@ from django.contrib import admin
 #"""Определяет схемы URL для learning_logs."""
 from learning_logs import views
 urlpatterns = [
-    url(r'admin/', admin.site.urls),
-    url(r'', include(('learning_logs.urls','learning_logs'), namespace='learning_logs')),
-# Домашняя страница
-    url('', views.index, name='index'),
+    url('admin/', admin.site.urls),
+    url('users/', include(('users.urls', 'users'), namespace='users')),
+    url('', include(('learning_logs.urls','learning_logs'), namespace='learning_logs')),
 ]
-#url(r'^reviews/', include(('reviews.urls', 'reviews'), namespace='reviews')),

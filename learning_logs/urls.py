@@ -1,17 +1,23 @@
-#"""Определяет схемы URL для learning_logs."""
+# """Определяет схемы URL для learning_logs."""
 from django.urls import path as url
 from . import views
 urlpatterns = [
-# Домашняя страница
-       url('', views.index, name='index'),
-       # Вывод всех тем.
-       url(r'topics/', views.topics, name='topics'),
-       # Вывод всех тем.
-       url('<topic_id>/', views.topic, name='topic'),
-       url(r'new_topic/$', views.new_topic, name='new_topic'),
-       url(r'^new_entry/(?P<topic_id>\d+)/$', views.new_entry, name='new_entry'),
-# Страница для редактирования записи
-       url(r'^edit_entry/(?P<entry_id>\d+)/$', views.edit_entry,
-    name='edit_entry'),
+    # Home page.
+    url('', views.index, name='index'),
 
+    # Show all topics.
+    url('topics/', views.topics, name='topics'),
+
+    # Detail page for a single topic.
+    url('topics/<topic_id>/', views.topic, name='topic'),
+
+    # Page for adding a new topic.
+    url('new_topic/', views.new_topic, name='new_topic'),
+
+    # Page for adding a new entry.
+    url('new_entry/<topic_id>/', views.new_entry, name='new_entry'),
+
+    # Page for editing an entry.
+    url('edit_entry/<entry_id>/', views.edit_entry,
+        name='edit_entry'),
 ]
