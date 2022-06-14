@@ -1,2 +1,2 @@
-Этот файл необходим для включения в проект каталога learning_log/static/.
-Django собирает статические файлы и помещает их в каталог learning_log/static/.
+This file ensures that learning_log/static/ will be added to the project. 
+Django will collect static files and place them in learning_log/static/.
