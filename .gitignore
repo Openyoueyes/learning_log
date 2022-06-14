@@ -1,7 +1,9 @@
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,pycharm
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,pycharm
-
+ll_env/
+__pycache__/
+*.sqlite3
 ### macOS ###
 # General
 .DS_Store
