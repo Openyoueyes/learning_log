@@ -1,30 +1,39 @@
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from .models import Topic, Entry
 from .forms import TopicForm, EntryForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, Http404
+
+
 def index(request):
     """The home page for Learning Log."""
     return render(request, 'learning_logs/index.html')
 
-@login_required
+
+
 def topics(request):
     """Show all topics."""
-    topics = Topic.objects.filter(owner=request.user).order_by('date_added')
+    public_topics = Topic.objects.filter(public=True).order_by('date_added')
+    if request.user.is_authenticated:
+        private_topics = Topic.objects.filter(owner=request.user).order_by('date_added')
+        topics = public_topics | private_topics
+    else:
+        topics = public_topics
     context = {'topics': topics}
     return render(request, 'learning_logs/topics.html', context)
+
 
 @login_required
 def topic(request, topic_id):
     """Show a single topic, and all its entries."""
-    topic = Topic.objects.get(id=topic_id)
+    topic = get_object_or_404(Topic, id=topic_id)
     # Проверка того, что тема принадлежит текущему пользователю.
-    check_topic_owner(topic.owner,request)
+    check_topic_owner(topic.owner, request)
     entries = topic.entry_set.order_by('-date_added')
     context = {'topic': topic, 'entries': entries}
     return render(request, 'learning_logs/topic.html', context)
+
 
 @login_required
 def new_topic(request):
@@ -43,10 +52,11 @@ def new_topic(request):
     context = {'form': form}
     return render(request, 'learning_logs/new_topic.html', context)
 
+
 @login_required
 def new_entry(request, topic_id):
     """Добавляет новую запись по конкретной теме."""
-    topic = Topic.objects.get(id=topic_id)
+    topic = get_object_or_404(Topic, id=topic_id)
     check_topic_owner(topic.owner, request)
     if request.method != 'POST':
         # Данные не отправлялись; создается пустая форма.
@@ -62,12 +72,13 @@ def new_entry(request, topic_id):
     context = {'topic': topic, 'form': form}
     return render(request, 'learning_logs/new_entry.html', context)
 
+
 @login_required
 def edit_entry(request, entry_id):
     """Редактирует существующую запись."""
-    entry = Entry.objects.get(id=entry_id)
+    entry = get_object_or_404(Entry,id=entry_id)
     topic = entry.topic
-    check_topic_owner(topic.owner,request)
+    check_topic_owner(topic.owner, request)
     if request.method != 'POST':
         # Исходный запрос; форма заполняется данными текущей записи.
         form = EntryForm(instance=entry)
@@ -80,6 +91,8 @@ def edit_entry(request, entry_id):
                                                 args=[topic.id]))
     context = {'entry': entry, 'topic': topic, 'form': form}
     return render(request, 'learning_logs/edit_entry.html', context)
-def check_topic_owner(owner,request):
+
+
+def check_topic_owner(owner, request):
     if owner != request.user:
         raise Http404

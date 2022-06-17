@@ -11,9 +11,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-fdcwhww*y=@+3ji-*10(wjr@r2y98@fd=%*m-a^@&bf_fgo9e+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["risk-learning-log.herokuapp.com"]
 
 # Application definition
 
@@ -94,7 +94,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -130,8 +130,8 @@ if cwd == '/app' or cwd[:4] == '/tmp':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
     # Only allow heroku to host the project.
-    ALLOWED_HOSTS = ['*']
-    DEBUG = False
+
+
 
     # Static asset configuration
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -139,3 +139,4 @@ if cwd == '/app' or cwd[:4] == '/tmp':
     STATICFILES_DIRS = (
         os.path.join(BASE_DIR, 'static'),
     )
+
